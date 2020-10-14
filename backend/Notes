@@ -1,0 +1,89 @@
+>> MVC <<
+Model, view, controlles
+
+>> Dependências <<
+yarn add @types/express -D    O node precisa que instalemos o pacote de tipagem
+yarn add typescript -D        Para usar a sintaxe TS, como o import '..' from '..'
+yarn tsc --init               Cria o tsconfig.json, onde alteramos a versão JS para qual o TS vai transpilar o código pro entendimento do Node
+yarn add ts-node-dev -D       Pacote para conseguir executar o projeto utilizando TS. Ex: ts-node-dev file
+yarn add typeorm sqlite3      TypeORM será utilizado para se comunicar com o banco de dados. SQLite3 será o banco escolhido.
+yarn add multer               Lida com o upload de arquivos
+yarn add express-async-errors       Captura os erros de métodos async
+yarn add yup                  Módulo de validação
+yarn add cors                 Permite a aplicação ser acessada por diferentes domínios
+
+
+>> ts-node-dev <<
+"typeorm": "ts-node-dev ts-node-dev ./node_modules/typeorm/cli.js"    Fala pro TypeORM rodar com TS
+
+Flags:
+"dev": "ts-node-dev
+--transpile-only              Impede as bibliotecas TS de verificar se tem erros no código, o vscode já faz isso
+--ignore-watch node_modules"   Impede o ts-node-dev de observar alterações no node_modules, aumenta e muito a velocidade
+
+
+>> Sobre Rotas <<
+Rota = app.get/post/put/etc do início ao fechamento.
+Recurso = /users
+
+Métodos HTTP = GET, POST, PUT, DELETE
+Por padrão o navegador faz requisições do tipo GET, por isso o insomnia é utilizado para testar rotas como POST, PUT e DELETE.
+
+Parâmetros:
+- Query Params: https://localhost:3333/users?search=diego   Muito utilizado para buscas
+- Route Parms: https://localhost:3333/users/1               Usado para identificar recursos, deletar usuario com id 1
+- Body: https://localhost:3333/users                        Usado para informações mais complexas, como formulários.
+
+app.post('/users/:id', (req, res) => {
+  console.log(req.query);
+  console.log(req.params);
+  console.log(req.body);
+
+  return res.json({ message: 'Hello world!' });
+})
+
+
+>> Formas de se lidar com Banco de dados no backend <<
+- Driver Nativo     Permite executar as querys do banco de dados direto pelo Node, mas é preciso escrever com a sintaxe do banco de dados.
+- Query Builder     Permite escrever as querys em JS, ex: knex('users').select('*').where('name', 'Diego')
+- ORM               Permite escrever tabelas como se fossem objetos JS
+
+Tanto o Query Builder quanto o ORM permite trocar de banco de dados sem preocupações, já que a sintaxe em JS
+continuará a mesma. O ORM ou o Query Builder simplesmente precisa fornecer suporte para o banco de dados.
+
+
+>> SQLite <<
+O SQLite não precisa ser instalado na máquina, é criado num arquivo físico na nossa aplicação. 
+SQLite3 é uma integração do SQL com node.
+
+
+>> TypeORM <<
+ormconfig.json      Conterá todas as informações da conexão com o banco de dados.
+connection.ts       import { createConnection } from 'typeorm'; createConnection(); // Cria a conexão com o banco de dados citado no ormconfig.json
+
+>> TypeORM comandos <<
+- yarn typeorm migration:create -n nome_da_migration      Cria um arquivo de migration
+- yarn typeorm migration:run                              Cria a migration
+- yarn typeorm migration:revert                           Faz o contrário do run, se o run criou uma migration, o revert deleta.
+
+PS: importar connection.ts no server.
+
+>> Migrations <<
+Tem como principal função sincronizar a aplicação, sempre que formos modificar/criar/deletar um campo ou tabela
+é preciso criar um arquivo dizendo o que precisa ser feito. Assim como o package.json, depois é só
+o outro dev dar um comando para puxar todas as alterações que foram feitas.
+
+>> ormconfig.json <<
+{
+  "type": "sqlite",                                           // Nome do banco de dados
+  "database": "./src/database/database.sqlite",               // Arquivo do banco de dados
+  "migrations": [                          
+    "./src/database/migrations/*.ts"                          // Onde ficam os arquivos migrations
+  ],
+  "entities": [
+    "./src/models/*.ts"                                       // Onde ficam os models
+  ],
+  "cli": {
+    "migrationsDir": "./src/database/migrations"              // Diretório onde o ORM deve criar novas migrations
+  }
+}
