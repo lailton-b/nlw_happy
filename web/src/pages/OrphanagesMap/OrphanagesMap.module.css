@@ -1,0 +1,75 @@
+.pageMap {
+  position: relative;
+  display: flex;
+
+  width: 100vw;
+  height: 100vh;
+}
+
+.pageMap aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  width: 400px;
+  padding: 80px;
+  background-image: linear-gradient(329.54deg, #29b6d1 0%, #00c7c7 100%);
+}
+
+.pageMap aside h2 {
+  font-size: 2.5rem;
+  line-height: 2.625rem;
+  font-weight: 800;
+  max-width: 240px;
+  margin-top: 64px;
+}
+
+.pageMap aside p {
+  line-height: 1.75rem;
+  max-width: 245px;
+  margin-top: 24px;
+}
+
+.pageMap aside footer {
+  display: flex;
+  flex-direction: column;
+
+  line-height: 1.5rem;
+}
+
+.pageMap aside strong {
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.pageMap > .map {
+  z-index: 1;
+}
+
+.pageMap .createOrphanages {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  z-index: 10;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 64px;
+  height: 64px;
+  background-color: #15c3d6;
+  border-radius: 20px;
+  transition: 0.5s;
+}
+
+.pageMap .createOrphanages:hover {
+  background-color: #17d6eb;
+}
+
+.pageMap .createOrphanages:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 4px #17d6eb;
+
+  background-color: #17d6eb;
+}
